@@ -298,7 +298,8 @@ class MainWindow(QMainWindow):
             return
         
         # Process first file for now
-        first_path = table.item(0, 0).text()
+        # Get full path from tooltip since we only show filename
+        first_path = table.item(0, 0).toolTip()
         out_dir = self.le_dest.text()
         
         # Get format based on current tab
@@ -378,7 +379,13 @@ class MainWindow(QMainWindow):
             it.setFlags(it.flags() ^ Qt.ItemIsEditable)
             return it
         
-        table.setItem(row, 0, item(path))
+        # Extract just the filename from the path
+        from pathlib import Path
+        filename = Path(path).name
+        
+        table.setItem(row, 0, item(filename))
+        # Store the full path as tooltip for reference
+        table.item(row, 0).setToolTip(path)
         for i in range(1, len(headers) - 1):
             table.setItem(row, i, item("—"))
         table.setItem(row, len(headers) - 1, item("Queued"))
