@@ -117,9 +117,9 @@ class MainWindow(QMainWindow):
         controls.addWidget(gb_bitrate)
 
         # Audio format group
-        gb_format = QGroupBox("Audio Format")
+        gb_format = QGroupBox("Output Format")
         g2 = QGridLayout(gb_format)
-        g2.addWidget(QLabel("Format:"), 0, 0)
+        g2.addWidget(QLabel("Audio Format:"), 0, 0)
         self.audio_cb_format = QComboBox()
         self.audio_cb_format.addItems(["mp3", "wav", "flac", "m4a", "aac"])
         g2.addWidget(self.audio_cb_format, 0, 1)
@@ -157,9 +157,9 @@ class MainWindow(QMainWindow):
         controls = QHBoxLayout()
         
         # Video format group
-        gb_format = QGroupBox("Video Format")
+        gb_format = QGroupBox("Output Format")
         g = QGridLayout(gb_format)
-        g.addWidget(QLabel("Format:"), 0, 0)
+        g.addWidget(QLabel("Video Format:"), 0, 0)
         self.video_cb_format = QComboBox()
         self.video_cb_format.addItems(["mp4", "webm", "avi", "mov"])
         g.addWidget(self.video_cb_format, 0, 1)
@@ -210,9 +210,9 @@ class MainWindow(QMainWindow):
         controls = QHBoxLayout()
         
         # Image format group
-        gb_format = QGroupBox("Image Format")
+        gb_format = QGroupBox("Output Format")
         g = QGridLayout(gb_format)
-        g.addWidget(QLabel("Format:"), 0, 0)
+        g.addWidget(QLabel("Image Format:"), 0, 0)
         self.image_cb_format = QComboBox()
         self.image_cb_format.addItems(["webp", "png", "jpg", "jpeg", "bmp", "tiff"])
         g.addWidget(self.image_cb_format, 0, 1)
