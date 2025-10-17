@@ -34,13 +34,13 @@ Ensure-Dependencies
 
 if ($Api -or (-not $DryRun)) {
     Write-Host "[run] Starting API on port $Port..."
-    fluxconvert api --port $Port
+    fluxconverter api --port $Port
     exit $LASTEXITCODE
 }
 
 if ($DryRun) {
     Write-Host "[run] Dry-running preset: $Preset"
-    fluxconvert dry-run $Preset
+    fluxconverter dry-run $Preset
     exit $LASTEXITCODE
 }
 

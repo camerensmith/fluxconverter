@@ -1,11 +1,39 @@
+# Python
 .venv/
 *.egg-info/
 __pycache__/
 .pytest_cache/
 .ruff_cache/
+*.pyc
+*.pyo
+
+# Build artifacts
 build/
 dist/
-*.log
+
+# Large binaries (downloaded separately)
+fluxconverter/bin/ffmpeg.exe
+
+# Test files
+*.mp4
+*.mp3
+*.wav
+*.webm
+*.webp
+*.png
+*.jpg
+*.jpeg
+*.flac
+*.m4a
+
+# OS
 Thumbs.db
 .DS_Store
+*.log
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
 

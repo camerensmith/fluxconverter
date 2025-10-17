@@ -1,5 +1,5 @@
 [project]
-name = "fluxconvert"
+name = "fluxconverter"
 version = "0.1.0"
 description = "Media conversion orchestrator with CLI, GUI, and local API"
 readme = "readme.txt"
@@ -23,7 +23,7 @@ dev = [
 ]
 
 [project.scripts]
-fluxconvert = "fluxconvert.cli:app"
+fluxconverter = "fluxconverter.cli:app"
 
 [build-system]
 requires = ["setuptools>=68", "wheel"]
@@ -34,5 +34,8 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["fluxconvert*"]
+include = ["fluxconverter*"]
+
+[tool.setuptools.package-data]
+fluxconverter = ["bin/*"]
 
