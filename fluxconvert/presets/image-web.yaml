@@ -1,0 +1,15 @@
+steps:
+  - name: decode
+    kind: decode
+    params:
+      input: input.jpg
+  - name: resize
+    kind: filter
+    params:
+      filter: "scale=w=1280:h=-1:flags=lanczos"
+  - name: encode
+    kind: encode
+    params:
+      format: webp
+      quality: 80
+
