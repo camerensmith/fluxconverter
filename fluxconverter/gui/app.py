@@ -163,10 +163,12 @@ class MainWindow(QMainWindow):
         if count == 0:
             QMessageBox.information(self, "Nothing to do", "No files in the queue.")
             return
-        # Minimal API call: send first file to API with selected format
+        
+        # Process first file for now (can extend to batch later)
         first_path = self.table.item(0, 0).text()
         out_dir = self.le_dest.text()
         fmt = self.cb_format.currentText()
+        
         try:
             resp = requests.post(
                 "http://127.0.0.1:7845/run",
@@ -178,11 +180,41 @@ class MainWindow(QMainWindow):
                 timeout=10,
             )
             if resp.ok:
-                QMessageBox.information(self, "Submitted", f"Job accepted: {resp.json()}")
+                result = resp.json()
+                job_id = result.get("job_id")
+                output_path = result.get("output_path")
+                
+                # Update status in table
+                self.table.setItem(0, 7, QTableWidgetItem("Processing..."))
+                
+                # Show success message with output path
+                QMessageBox.information(
+                    self, 
+                    "Conversion Started", 
+                    f"Job ID: {job_id}\nOutput: {output_path}\n\nCheck the output directory for your converted file."
+                )
+                
+                # Start monitoring progress (simple version)
+                self.monitor_job(job_id, 0)
             else:
                 QMessageBox.warning(self, "Error", f"API error: {resp.status_code}")
         except Exception as e:
             QMessageBox.critical(self, "Request failed", str(e))
+
+    def monitor_job(self, job_id: str, row: int):
+        """Simple job monitoring - check status once."""
+        try:
+            resp = requests.get(f"http://127.0.0.1:7845/status/{job_id}", timeout=5)
+            if resp.ok:
+                status = resp.json()
+                if status["status"] == "completed":
+                    self.table.setItem(row, 7, QTableWidgetItem("Completed"))
+                elif status["status"] == "failed":
+                    self.table.setItem(row, 7, QTableWidgetItem(f"Failed: {status.get('error', 'Unknown error')}"))
+                elif status["status"] == "processing":
+                    self.table.setItem(row, 7, QTableWidgetItem(f"Processing... {status.get('progress', 0)}%"))
+        except Exception:
+            pass  # Ignore monitoring errors
 
     def choose_dest(self):
         d = QFileDialog.getExistingDirectory(self, "Choose destination", self.le_dest.text())
