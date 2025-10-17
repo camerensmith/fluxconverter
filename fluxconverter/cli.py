@@ -9,6 +9,7 @@ import yaml
 from .core.models import PipelineSpec
 from .runner import run_dry
 from .api import create_app
+from .gui.main import main as gui_main
 
 
 app = typer.Typer(help="FluxConvert CLI")
@@ -31,6 +32,12 @@ def dry_run(config: Path, preset: Optional[Path] = None):
 def run_api(port: int = 7845, host: str = "127.0.0.1"):
     """Start local API server."""
     uvicorn.run(create_app(), host=host, port=port)
+
+
+@app.command("gui")
+def run_gui():
+    """Start the GUI application."""
+    gui_main()
 
 
 def main():  # for python -m fluxconvert
