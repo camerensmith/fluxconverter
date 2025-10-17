@@ -238,6 +238,21 @@ class MainWindow(QMainWindow):
         g2.addWidget(self.image_sb_height, 1, 1)
         controls.addWidget(gb_resize)
 
+        # AI Upscaling group
+        gb_ai = QGroupBox("AI Upscaling")
+        g3 = QGridLayout(gb_ai)
+        self.image_chk_ai = QCheckBox("Enable AI Upscaling")
+        g3.addWidget(self.image_chk_ai, 0, 0, 1, 2)
+        g3.addWidget(QLabel("Model:"), 1, 0)
+        self.image_cb_ai_model = QComboBox()
+        self.image_cb_ai_model.addItems(["Real-ESRGAN", "GFPGAN", "SwinIR"])
+        g3.addWidget(self.image_cb_ai_model, 1, 1)
+        g3.addWidget(QLabel("Scale:"), 2, 0)
+        self.image_cb_ai_scale = QComboBox()
+        self.image_cb_ai_scale.addItems(["2x", "4x", "8x"])
+        g3.addWidget(self.image_cb_ai_scale, 2, 1)
+        controls.addWidget(gb_ai)
+
         layout.addLayout(controls)
         self.tab_widget.addTab(image_tab, "🖼️ Image")
 
@@ -302,13 +317,23 @@ class MainWindow(QMainWindow):
         first_path = table.item(0, 0).toolTip()
         out_dir = self.le_dest.text()
         
-        # Get format based on current tab
+        # Get format and options based on current tab
         if current_tab == 0:  # Audio
             fmt = self.audio_cb_format.currentText()
+            options = {}
         elif current_tab == 1:  # Video
             fmt = self.video_cb_format.currentText()
+            options = {}
         else:  # Image
             fmt = self.image_cb_format.currentText()
+            options = {
+                "ai_upscaling": self.image_chk_ai.isChecked(),
+                "ai_model": self.image_cb_ai_model.currentText() if self.image_chk_ai.isChecked() else None,
+                "ai_scale": self.image_cb_ai_scale.currentText() if self.image_chk_ai.isChecked() else None,
+                "quality": self.image_sb_quality.value(),
+                "width": self.image_sb_width.value(),
+                "height": self.image_sb_height.value()
+            }
         
         try:
             resp = requests.post(
@@ -317,6 +342,7 @@ class MainWindow(QMainWindow):
                     "input_path": first_path,
                     "output_dir": out_dir,
                     "output_format": fmt,
+                    "options": options,
                 },
                 timeout=10,
             )
